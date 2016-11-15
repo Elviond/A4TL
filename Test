@@ -1,0 +1,37 @@
+import socket
+import subprocess
+import picamera
+import time
+
+s = socket.socket()
+s.bind(('0.0.0.0', 8000))
+s.listen(0)
+
+
+connection, addr = s.accept()
+try:
+    camera = picamera.PiCamera()
+    camera.resolution = (1920, 1080)
+
+    for i in range(10):
+        camera.capture("/home/pi/photo/photo{}".format(i))
+        with open("/home/pi/photo/photo{}".format(i), 'rb') as photo:
+            connection.send(photo.read().encode())
+    time.sleep(10)
+finally:
+    connection.close()
+    s.close()
+
+import socket
+
+s = socket.socket()
+s.connect(('10.42.42.27', 8002))
+
+try:
+    for i in range(10):
+        data = s.recv(5*10^6)
+        #print(str(data))
+        with open('C:\\Users\\Profs\\Downloads\\photo{}.jpg'.format(i), 'wb') as file:
+            file.write(data)
+finally:
+    s.close()
