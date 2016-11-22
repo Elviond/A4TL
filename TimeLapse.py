@@ -7,6 +7,7 @@ def runAsync(fn):
     def run(*k, **kw):
         t = threading.Thread(target=fn, args=k, kwargs=kw)
         t.start()
+        return t
     return run
 
 class TimeLapse(object):
@@ -23,20 +24,30 @@ class TimeLapse(object):
         self.camera = picamera.PiCamera()
         self.camera.resolution = (1920, 1080)
 
+        self.ISO = 200
+        self.camera.exposure_mode = 'sports'
+
         self.FPS = None
         self.tpsRendu = None
         self.tpsFonctionnement = None
 
     @runAsync
-    def capturePhotoSync(self):
-        self.TIMESTAMP = time.strftime("%d-%m-%Y_%H:%M:%S")
+    def capturePhoto(self):
+        self.TIMESTAMP = time.strftime("%d-%m-%Y_%H-%M-%S")
         self.camera.capture('photo_{}.jpg'.format(self.TIMESTAMP))
 
     def startTimeLapse(self, FPS, tpsRendu, tpsFonctionnement):
-        self.interval = (FPS* tpsRendu) / (tpsFonctionnement*3600)
+        self.FPS = FPS
+        self.tpsRendu = tpsRendu
+        self.tpsFonctionnement = tpsFonctionnement
+        self.interval = (tpsFonctionnement*3600) / (FPS* tpsRendu)
 
-    @runAsync
-    def test(self):
-        for i in range(10):
-            print('yolo')
+        print(self.FPS * self.tpsRendu)
+        for i in range(0, self.FPS * self.tpsRendu - 1):
+            self.capturePhoto()
+            time.sleep(self.interval)
 
+    def setSharpness(self, sharpness):
+        self.camera.sharpness = sharpness
+    def setISO(self, ISO):
+        self.camera.iso = ISO
