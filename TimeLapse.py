@@ -11,7 +11,7 @@ def runAsync(fn):
     return run
 
 class TimeLapse(object):
-    def __init__(self, path):
+    def __init__(self, path, FPS=24, tpsRendu, tpsFonctionnement):
         if (path[-1] == '/'):
             self.path = path
         else:
@@ -20,27 +20,22 @@ class TimeLapse(object):
         os.chdir(path)
 
 
-        #Camera Raspberry
+        #Configuration de la Camera Raspberry (va être déplacé dans une classe à part)
         self.camera = picamera.PiCamera()
-        self.camera.resolution = (1920, 1080)
-
         self.ISO = 200
         self.camera.exposure_mode = 'sports'
 
-        self.FPS = None
-        self.tpsRendu = None
-        self.tpsFonctionnement = None
+        self.FPS = FPS
+        self.tpsRendu = tpsRendu
+        self.tpsFonctionnement = tpsFonctionnement
 
     @runAsync
     def capturePhoto(self):
         self.TIMESTAMP = time.strftime("%d-%m-%Y_%H-%M-%S")
         self.camera.capture('photo_{}.jpg'.format(self.TIMESTAMP))
 
-    def startTimeLapse(self, FPS, tpsRendu, tpsFonctionnement):
-        self.FPS = FPS
-        self.tpsRendu = tpsRendu
-        self.tpsFonctionnement = tpsFonctionnement
-        self.interval = (tpsFonctionnement*3600) / (FPS* tpsRendu)
+    def startTimeLapse(self):
+        self.interval = (self.tpsFonctionnement*3600) / (self.FPS* self.tpsRendu)
 
         print(self.FPS * self.tpsRendu)
         for i in range(0, self.FPS * self.tpsRendu - 1):
