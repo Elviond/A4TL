@@ -37,8 +37,7 @@ class TimeLapse(object):
         self.camera = picamera.PiCamera()
         self.camera.resolution = (1920, 1080)
 
-        self.ISO = 300
-        self.camera.exposure_mode = 'sports'
+        self.camera.exposure_mode = 'auto'
 
         self.FPS = None
         self.tpsRendu = None
@@ -92,3 +91,6 @@ timelapse.startTimeLapse(24, 30, 0.25, False)
 movie = Movie.MovieHandler(path)
 movie.makeVideo()
 timelapse.sendVideo()
+
+
+
