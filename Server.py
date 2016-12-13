@@ -11,10 +11,10 @@ while True:
     print(data)
 
     if data['Ordre'] == 'Timelapse':
-        timelapse = TimeLapse.TimeLapse(data["Ordre"][0])
-        timelapse.startTimeLapse(data["Ordre"][1], data["Ordre"][2], data["Ordre"][3], data["Ordre"][4])
+        timelapse = TimeLapse.TimeLapse(data["Action"][0])
+        timelapse.startTimeLapse(data["Action"][1], data["Action"][2], data["Action"][3], data["Action"][4])
 
-        movie = Movie.MovieHandler(data["Ordre"][0])
+        movie = Movie.MovieHandler(data["Action"][0])
         movie.makeVideo()
 
         server.send({'Ordre':'Etat_Timelapse', 'Action':True})
