@@ -10,7 +10,7 @@ while True:
     data = server.recv()
     print(data)
 
-    if data['Action'] == 'Timelapse':
+    if data['Ordre'] == 'Timelapse':
         timelapse = TimeLapse.TimeLapse(data["Ordre"][0])
         timelapse.startTimeLapse(data["Ordre"][1], data["Ordre"][2], data["Ordre"][3], data["Ordre"][4])
 
