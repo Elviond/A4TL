@@ -11,9 +11,9 @@ def writeMesures(temps_pose, temps, i):
         temps_file.write(str(temps).replace('.', ',') + '\n')
 
     print(str(temps) + ' ' + str(temps_pose) + ' {} / {}'.format(i+1, etendue))
-
-start_time = time.time()
+    
 etendue = 1440
+start_time = time.time()
 for i in range(0, etendue):
     t0 = time.time()
     camera.capture("mesure.jpg")
